@@ -71,7 +71,7 @@
             font-size: 16px; 
             color: rgba(255, 255, 255, 0.8); 
             margin-bottom: 30px; 
-            transition: opacity 0.4s ease; /* Добавили плавность для исчезновения */
+            transition: opacity 0.4s ease;
         }
         .btn {
             background: linear-gradient(135deg, #ff758c, #ff7eb3);
@@ -161,7 +161,7 @@
                 </div>
             </div>
             <div id="finalStage">
-                <h2>Для тебе, Настя! 👑</h2>
+                <h2>Для тебе! 👑</h2>
                 <p>
                     Хотілось би в цей день побажати тобі якомога більше щасливих моментів ✨ <br><br>
                     Життя тільки починається, тому не жалкуй про минуле — просто створюй нове! 🔥 <br><br>
@@ -187,7 +187,6 @@
             setTimeout(() => card.style.transform = 'scale(1)', 200);
         });
 
-        // Плавное исчезновение подзаголовка при свайпе
         carousel.addEventListener('scroll', () => {
             if (carousel.scrollLeft > 20) {
                 mainSubtitle.style.opacity = '0';
@@ -206,7 +205,6 @@
                 colors: ['#ff0000', '#ff758c', '#ff7eb3', '#ffffff']
             });
             
-            // Прячем всё ненужное перед финальным текстом
             carousel.style.display = 'none';
             mainSubtitle.style.display = 'none'; 
             
