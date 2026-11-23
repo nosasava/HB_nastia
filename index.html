@@ -1,0 +1,219 @@
+<!--Зачем ти це читаєш? Айтішнік? -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>З Днем Народження! 🥳</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #110e1a;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
+            overflow: hidden;
+            position: relative;
+        }
+        .bg-photos {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none; overflow: hidden;
+        }
+        .bg-photo {
+            position: absolute; width: 140px; height: 140px;
+            object-fit: cover; border-radius: 12px;
+            opacity: 0.25; filter: blur(1.5px) grayscale(20%);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            animation: float 25s infinite linear alternate;
+        }
+        .bg-photo:nth-child(1) { top: 5%; left: -10%; animation-duration: 28s; animation-delay: 0s; }
+        .bg-photo:nth-child(2) { top: 45%; right: -15%; animation-duration: 24s; animation-delay: -5s; }
+        .bg-photo:nth-child(3) { bottom: -5%; left: 10%; animation-duration: 32s; animation-delay: -10s; }
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-40px) translateX(20px) rotate(8deg) scale(1.05); }
+            100% { transform: translateY(20px) translateX(-20px) rotate(-8deg) scale(0.95); }
+        }
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(17,14,26,0.3) 0%, rgba(17,14,26,0.9) 100%);
+            z-index: 2; pointer-events: none;
+        }
+        .container {
+            position: relative; z-index: 3;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; padding: 40px 20px;
+            width: 100%; max-width: 380px; text-align: center;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, height 0.3s ease;
+        }
+        h1 {
+            font-size: 28px; margin-bottom: 10px;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p.subtitle { 
+            font-size: 16px; 
+            color: rgba(255, 255, 255, 0.8); 
+            margin-bottom: 30px; 
+            transition: opacity 0.4s ease; /* Добавили плавность для исчезновения */
+        }
+        .btn {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: white; border: none; border-radius: 20px;
+            padding: 15px 30px; font-size: 18px; font-weight: 600;
+            width: 100%; box-shadow: 0 4px 15px rgba(255, 117, 140, 0.4);
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .secret-content { display: none; margin-top: 20px; animation: fadeIn 0.8s ease forwards; }
+        
+        .carousel {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            gap: 15px; padding-bottom: 10px; scrollbar-width: none; -ms-overflow-style: none;
+            transition: opacity 0.5s ease;
+        }
+        .carousel::-webkit-scrollbar { display: none; }
+        .carousel-item {
+            flex: 0 0 100%; scroll-snap-align: center;
+            background: rgba(0, 0, 0, 0.3); border-radius: 16px;
+            padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .carousel-item img {
+            width: 100%; height: 280px; object-fit: cover;
+            border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+        .carousel-item .caption { font-size: 15px; color: #fff; font-weight: 500; line-height: 1.4; }
+        .heart-btn {
+            font-size: 80px; cursor: pointer;
+            animation: pulse 1s infinite;
+            transition: transform 0.2s;
+            margin: 40px 0;
+            user-select: none;
+        }
+        .heart-btn:active { transform: scale(0.8); }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        #finalStage {
+            display: none;
+            animation: fadeIn 1.5s ease forwards;
+            padding: 20px 0;
+        }
+        #finalStage h2 {
+            font-size: 24px; margin-bottom: 15px;
+            color: #ff758c;
+        }
+        #finalStage p {
+            font-size: 16px; line-height: 1.6; color: #fff; text-align: left;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-photos">
+        <img class="bg-photo" src="First.png" alt="фон">
+        <img class="bg-photo" src="Second.jpg" alt="фон">
+        <img class="bg-photo" src="phon.jpg" alt="фон">
+    </div>
+    <div class="overlay"></div>
+    <div class="container" id="card">
+        <h1>З Днем Народження, Настя!</h1>
+        <p class="subtitle" id="mainSubtitle">У мене для тебе дещо є 🖤</p>
+        <button class="btn" id="magicBtn">Відкрити</button>
+        <div class="secret-content" id="content">
+            <div class="carousel" id="mainCarousel">
+                <div class="carousel-item">
+                    <img src="First.png" alt="Фото 1">
+                    <div class="caption">Бажаю тобі успіхів у всіх твоїх починаннях 🔥</div>
+                </div>
+                <div class="carousel-item">
+                    <img src="Third.jpg" alt="Фото 2">
+                    <div class="caption">Залишатись такою ж цікавою та енергійною 🎊 </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="Last.jpg" alt="Фото 3">
+                    <div class="caption">Та якщо навіть опускаються руки, підійми голову!! ✨</div>
+                </div>
+                <div class="carousel-item">
+                    <div class="heart-btn" id="explodeHeart">❤️</div>
+                    <div class="caption">Тапай по екранчику!</div>
+                </div>
+            </div>
+            <div id="finalStage">
+                <h2>Для тебе, Настя! 👑</h2>
+                <p>
+                    Хотілось би в цей день побажати тобі якомога більше щасливих моментів ✨ <br><br>
+                    Життя тільки починається, тому не жалкуй про минуле — просто створюй нове! 🔥 <br><br>
+                    Ну і, звісно, бажаю того, що ти сама собі найбільше бажаєш! 🥂🖤 🥳🥳🥳
+                </p>
+            </div>
+        </div>
+    </div>
+    <script>
+        const btn = document.getElementById('magicBtn');
+        const content = document.getElementById('content');
+        const card = document.getElementById('card');
+        const carousel = document.getElementById('mainCarousel');
+        const explodeHeart = document.getElementById('explodeHeart');
+        const finalStage = document.getElementById('finalStage');
+        const mainSubtitle = document.getElementById('mainSubtitle');
+
+        btn.addEventListener('click', () => {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ff758c', '#ff7eb3', '#ffffff'] });
+            btn.style.display = 'none';
+            content.style.display = 'block';
+            card.style.transform = 'scale(1.02)';
+            setTimeout(() => card.style.transform = 'scale(1)', 200);
+        });
+
+        // Плавное исчезновение подзаголовка при свайпе
+        carousel.addEventListener('scroll', () => {
+            if (carousel.scrollLeft > 20) {
+                mainSubtitle.style.opacity = '0';
+            }
+        });
+
+        explodeHeart.addEventListener('click', (e) => {
+            const rect = explodeHeart.getBoundingClientRect();
+            const x = (rect.left + rect.right) / 2 / window.innerWidth;
+            const y = (rect.top + rect.bottom) / 2 / window.innerHeight;
+            confetti({
+                particleCount: 250,
+                spread: 120,
+                startVelocity: 40,
+                origin: { x: x, y: y },
+                colors: ['#ff0000', '#ff758c', '#ff7eb3', '#ffffff']
+            });
+            
+            // Прячем всё ненужное перед финальным текстом
+            carousel.style.display = 'none';
+            mainSubtitle.style.display = 'none'; 
+            
+            finalStage.style.display = 'block';
+            card.style.transform = 'scale(1.05)';
+            setTimeout(() => card.style.transform = 'scale(1)', 300);
+        });
+    </script>
+</body>
+</html>
